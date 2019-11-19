@@ -68,14 +68,12 @@
             <artifactId>models</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
+            </dependency>
         <dependency>
-            <groupId>com.fri.code</groupId>
-            <artifactId>models</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>com.kumuluz.ee.discovery</groupId>
+            <artifactId>kumuluzee-discovery-etcd</artifactId>
+            <version>${kumuluzee-discovery.version}</version>
         </dependency>
-
     </dependencies>
 
 

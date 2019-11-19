@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Table(name="outputs")
 @NamedQueries(
         value = {
-                @NamedQuery(name = "OutputMetadataEntity.getAll", query = "SELECT output FROM OutputMetadataEntity output")
+                @NamedQuery(name = "OutputMetadataEntity.getAll", query = "SELECT output FROM OutputMetadataEntity output"),
+                @NamedQuery(name="OutputMetadataEntity.getOutputsForInput", query = "SELECT output FROM OutputMetadataEntity output WHERE output.inputID = ?1")
         }
 )
 public class OutputMetadataEntity {
@@ -23,7 +24,7 @@ public class OutputMetadataEntity {
     @Column(name = "isHidden")
     private Boolean isHidden;
 
-    @Column(name = "inputID")
+    @Column(name = "inputID", unique = true)
     private Integer inputID;
 
     public Integer getID() {
