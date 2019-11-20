@@ -4,12 +4,12 @@ kumuluzee:
     name: dev
   version: 1.0.0
   server:
-    base-url: http://localhost:8081
+    base-url: http://localhost:8082
     http:
-      port: 8081
+      port: 8082
   datasources:
     - jndi-name: jdbc/OutputMetadataPS
-      connection-url: jdbc:postgresql://localhost:5431/exercise-metadata
+      connection-url: jdbc:postgresql://localhost:5431/code-outputs
       username: dbuser
       password: postgres
       max-pool-size: 20
