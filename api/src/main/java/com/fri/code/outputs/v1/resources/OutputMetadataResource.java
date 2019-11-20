@@ -9,6 +9,7 @@ import javassist.tools.reflect.Compiler;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -34,8 +35,27 @@ public class OutputMetadataResource {
 
     @GET
     public Response getOutputForInputID(@QueryParam("inputID") Integer inputID){
-        OutputMetadata output = outputMetadataBean.getOutputForInputID(inputID);
-        return Response.ok(output).build();
+        try {
+            OutputMetadata output = outputMetadataBean.getOutputForInputID(inputID);
+            return Response.ok(output).build();
+        }
+        catch (Exception e){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @GET
+    @Path("/all")
+    public Response getAllOutputs(){
+        try
+        {
+            List<OutputMetadata> outputs = outputMetadataBean.getAllOutputs();
+            return Response.ok(outputs).build();
+        }
+        catch (Exception e){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
     }
 
     @POST

@@ -28,6 +28,8 @@ import javax.ws.rs.core.UriInfo;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.PersistenceException.*;
+import javax.persistence.NoResultException;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -52,7 +54,13 @@ public class OutputMetadataBean {
         compilerApiUrl = "https://api.jdoodle.com/v1/execute";
     }
 
+    public List<OutputMetadata> getAllOutputs(){
+        TypedQuery<OutputMetadataEntity> query = em.createNamedQuery("OutputMetadataEntity.getAll", OutputMetadataEntity.class);
+        return query.getResultList().stream().map(OutputMetadataConverter::toDTO).collect(Collectors.toList());
+    }
+
     public OutputMetadata getOutputForInputID(Integer inputID){
+
         TypedQuery<OutputMetadataEntity> query = em.createNamedQuery("OutputMetadataEntity.getOutputsForInput", OutputMetadataEntity.class);
         return OutputMetadataConverter.toDTO(query.setParameter(1, inputID).getSingleResult());
     }
