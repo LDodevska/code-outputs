@@ -9,7 +9,7 @@ kumuluzee:
       port: 8082
   datasources:
     - jndi-name: jdbc/OutputMetadataPS
-      connection-url: jdbc:postgresql://localhost:5431/exercise-metadata
+      connection-url: jdbc:postgresql://localhost:5431/code-outputs
       username: dbuser
       password: postgres
       max-pool-size: 20
