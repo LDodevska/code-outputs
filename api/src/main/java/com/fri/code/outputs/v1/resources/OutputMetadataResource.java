@@ -125,12 +125,12 @@ public class OutputMetadataResource {
 
     }
 
-//    @DELETE
-//    public Response deleteAllOutputs(){
-//        if(outputMetadataBean.deleteAllOutputs())
-//            return Response.status(Response.Status.NO_CONTENT).build();
-//        else return Response.status(Response.Status.NOT_FOUND).build();
-//    }
+    @DELETE
+    public Response deleteAllOutputs(){
+        if(outputMetadataBean.deleteAllOutputs())
+            return Response.status(Response.Status.NO_CONTENT).build();
+        else return Response.status(Response.Status.NOT_FOUND).build();
+    }
 
 
 }
