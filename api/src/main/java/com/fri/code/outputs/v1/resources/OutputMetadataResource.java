@@ -35,12 +35,26 @@ public class OutputMetadataResource {
     protected UriInfo uriInfo;
 
     @GET
-    public Response getOutputForInputID(@QueryParam("inputID") Integer inputID){
+    @Path("/{outputID}")
+    public Response getOutputById(@PathParam("outputID") Integer outputID) {
+        try {
+            OutputMetadata output = outputMetadataBean.getOutputById(outputID);
+            return Response.ok(output).build();
+        } catch (Exception e) {
+            ApiError apiError = new ApiError();
+            apiError.setCode(Response.Status.NOT_FOUND.toString());
+            apiError.setMessage(e.getMessage());
+            apiError.setStatus(Response.Status.NOT_FOUND.getStatusCode());
+            return Response.status(Response.Status.NOT_FOUND).entity(apiError).build();
+        }
+    }
+
+    @GET
+    public Response getOutputForInputID(@QueryParam("inputID") Integer inputID) {
         try {
             OutputMetadata output = outputMetadataBean.getOutputForInputID(inputID);
             return Response.ok(output).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             ApiError apiError = new ApiError();
             apiError.setCode(Response.Status.NOT_FOUND.toString());
             apiError.setMessage(e.getMessage());
@@ -51,35 +65,29 @@ public class OutputMetadataResource {
 
     @GET
     @Path("/all")
-    public Response getAllOutputs(){
-        try
-        {
+    public Response getAllOutputs() {
+        try {
             List<OutputMetadata> outputs = outputMetadataBean.getAllOutputs();
             return Response.ok(outputs).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             ApiError apiError = new ApiError();
             apiError.setCode(Response.Status.NOT_FOUND.toString());
             apiError.setMessage(e.getMessage());
             apiError.setStatus(Response.Status.NOT_FOUND.getStatusCode());
             return Response.status(Response.Status.NOT_FOUND).entity(apiError).build();
         }
-
     }
 
     @POST
-    public Response createOutput(OutputMetadata outputMetadata){
+    public Response createOutput(OutputMetadata outputMetadata) {
 
-        if (outputMetadata.getInputID() == null || outputMetadata.getCorrectOutput() == null || outputMetadata.getUserOutput() == null){
+        if (outputMetadata.getInputID() == null || outputMetadata.getCorrectOutput() == null || outputMetadata.getUserOutput() == null) {
             return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        else{
+        } else {
             try {
                 outputMetadata = outputMetadataBean.createOutputMetadata(outputMetadata);
                 return Response.status(STATUS_OK).entity(outputMetadata).build();
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 ApiError apiError = new ApiError();
                 apiError.setCode(Response.Status.BAD_REQUEST.toString());
                 apiError.setMessage(e.getMessage());
@@ -90,14 +98,14 @@ public class OutputMetadataResource {
 
     }
 
+    //For the given inputs, return the compiled outputs and compare them with the correct ones.
     @POST
     @Path("results")
-    public Response getResults(List<InputMetadata> inputs){
-        try{
+    public Response getResults(List<InputMetadata> inputs) {
+        try {
             Map<Integer, Boolean> outputs = outputMetadataBean.getCompilerOutputsForExercise(inputs);
             return Response.status(Response.Status.OK).entity(outputs).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             ApiError apiError = new ApiError();
             apiError.setCode(Response.Status.INTERNAL_SERVER_ERROR.toString());
             apiError.setMessage(e.getMessage());
@@ -106,6 +114,16 @@ public class OutputMetadataResource {
         }
     }
 
+    @DELETE
+    @Path("/{outputID}")
+    public Response deleteOutput(@PathParam("outputID") Integer outputID) {
+        if (outputMetadataBean.deleteOutputMetadata(outputID))
+            return Response.status(Response.Status.NO_CONTENT).build();
+        else
+            return Response.status(Response.Status.NOT_FOUND).build();
+
+
+    }
 
 //    @DELETE
 //    public Response deleteAllOutputs(){

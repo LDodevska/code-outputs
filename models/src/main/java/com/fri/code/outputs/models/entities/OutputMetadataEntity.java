@@ -3,11 +3,12 @@ package com.fri.code.outputs.models.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name="outputs")
+@Table(name = "outputs")
 @NamedQueries(
         value = {
                 @NamedQuery(name = "OutputMetadataEntity.getAll", query = "SELECT output FROM OutputMetadataEntity output"),
-                @NamedQuery(name="OutputMetadataEntity.getOutputsForInput", query = "SELECT output FROM OutputMetadataEntity output WHERE output.inputID = ?1")
+                @NamedQuery(name = "OutputMetadataEntity.getOutputsForInput", query = "SELECT output FROM OutputMetadataEntity output WHERE output.inputID = ?1"),
+                @NamedQuery(name = "OutputMetadataEntity.getOutputById", query = "SELECT output FROM OutputMetadataEntity output WHERE output.ID = ?1")
         }
 )
 public class OutputMetadataEntity {

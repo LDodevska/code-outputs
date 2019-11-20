@@ -48,34 +48,39 @@ public class OutputMetadataBean {
     private List<OutputMetadata> outputs;
 
     @PostConstruct
-    void init(){
+    void init() {
         httpClient = ClientBuilder.newClient();
 //        baseURL = "http://localhost:8081";
         compilerApiUrl = "https://api.jdoodle.com/v1/execute";
     }
 
-    public List<OutputMetadata> getAllOutputs(){
+    public OutputMetadata getOutputById(Integer outputID) {
+        TypedQuery<OutputMetadataEntity> query = em.createNamedQuery("OutputMetadataEntity.getOutputById", OutputMetadataEntity.class);
+        return OutputMetadataConverter.toDTO(query.setParameter(1, outputID).getSingleResult());
+    }
+
+    public List<OutputMetadata> getAllOutputs() {
         TypedQuery<OutputMetadataEntity> query = em.createNamedQuery("OutputMetadataEntity.getAll", OutputMetadataEntity.class);
         return query.getResultList().stream().map(OutputMetadataConverter::toDTO).collect(Collectors.toList());
     }
 
-    public OutputMetadata getOutputForInputID(Integer inputID){
+    public OutputMetadata getOutputForInputID(Integer inputID) {
 
         TypedQuery<OutputMetadataEntity> query = em.createNamedQuery("OutputMetadataEntity.getOutputsForInput", OutputMetadataEntity.class);
         return OutputMetadataConverter.toDTO(query.setParameter(1, inputID).getSingleResult());
     }
 
-    public boolean compareOutputs(OutputMetadata outputMetadata, CompilerOutput outputResult){
+    public boolean compareOutputs(OutputMetadata outputMetadata, CompilerOutput outputResult) {
         return outputResult.getOutput().trim().equals(outputMetadata.getCorrectOutput().trim());
     }
 
-    public CompilerOutput getCompilerOutput(InputMetadata inputMetadata){
+    public CompilerOutput getCompilerOutput(InputMetadata inputMetadata) {
         CompilerOutput output = new CompilerOutput();
         String script = "x=input()\nprint(x)"; // treba da e getScript(exerciseID, currentUserID);
         CompilerReadyInput input = new CompilerReadyInput();
         input.setLanguage("python3"); // treba da e setLanguage(getSubject(exerciseID).getLanguage())
         input.setScript(script);
-        if(!inputMetadata.getContent().isEmpty())
+        if (!inputMetadata.getContent().isEmpty())
             input.setStdin(inputMetadata.getContent());
         input.setVersionIndex("2");
         try {
@@ -88,10 +93,10 @@ public class OutputMetadataBean {
         return output;
     }
 
-    public Map<Integer, Boolean> getCompilerOutputsForExercise(List<InputMetadata> inputs){
+    public Map<Integer, Boolean> getCompilerOutputsForExercise(List<InputMetadata> inputs) {
         Map<Integer, Boolean> outputs = new HashMap();
 
-        for(InputMetadata inp: inputs){
+        for (InputMetadata inp : inputs) {
             CompilerOutput output = getCompilerOutput(inp);
             OutputMetadata outputMetadata = getOutputForInputID(inp.getID());
             outputs.put(outputMetadata.getID(), compareOutputs(outputMetadata, output));
@@ -100,7 +105,7 @@ public class OutputMetadataBean {
         return outputs;
     }
 
-    public OutputMetadata createOutputMetadata(OutputMetadata outputMetadata){
+    public OutputMetadata createOutputMetadata(OutputMetadata outputMetadata) {
         OutputMetadataEntity outputMetadataEntity = OutputMetadataConverter.toEntity(outputMetadata);
 
         try {
@@ -111,7 +116,7 @@ public class OutputMetadataBean {
             rollbackTx();
         }
 
-        if(outputMetadataEntity.getID() == null){
+        if (outputMetadataEntity.getID() == null) {
             throw new RuntimeException("The output was not saved");
         }
 
@@ -119,7 +124,7 @@ public class OutputMetadataBean {
     }
 
 
-    public boolean deleteOutputMetadata(Integer outputID){
+    public boolean deleteOutputMetadata(Integer outputID) {
         OutputMetadataEntity outputMetadataEntity = em.find(OutputMetadataEntity.class, outputID);
         if (outputMetadataEntity != null) {
             try {
@@ -129,18 +134,17 @@ public class OutputMetadataBean {
             } catch (Exception e) {
                 rollbackTx();
             }
-        }
-        else
+        } else
             return false;
 
         return true;
     }
 
-    public boolean deleteAllOutputs(){
+    public boolean deleteAllOutputs() {
         TypedQuery<OutputMetadataEntity> query = em.createNamedQuery("OutputMetadataEntity.getAll", OutputMetadataEntity.class);
         List<OutputMetadataEntity> outputMetadataList = query.getResultList();
-        if (outputMetadataList != null){
-            for(OutputMetadataEntity o : outputMetadataList){
+        if (outputMetadataList != null) {
+            for (OutputMetadataEntity o : outputMetadataList) {
                 try {
                     beginTx();
                     em.remove(o);
@@ -149,8 +153,7 @@ public class OutputMetadataBean {
                     rollbackTx();
                 }
             }
-        }
-        else
+        } else
             return false;
 
         return true;
