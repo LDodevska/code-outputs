@@ -13,7 +13,7 @@ spec:
         app: code-outputs
     spec:
       containers:
-        - image: ldodevska/code-outputs:1.0-SNAPSHOT-4.1
+        - image: ldodevska/code-outputs:1.0-SNAPSHOT-7.1
           name: code-outputs
           env:
             - name: KUMULUZEE_DISCOVERY_CLUSTER
@@ -29,7 +29,7 @@ spec:
             - name: KUMULUZEE_DATASOURCES0_PASSWORD
               value: laptop
           ports:
-            - containerPort: 8080
+            - containerPort: 8082
               name: server
               protocol: TCP
 ---

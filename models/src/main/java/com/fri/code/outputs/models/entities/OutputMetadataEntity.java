@@ -3,7 +3,7 @@ package com.fri.code.outputs.models.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "outputs")
+@Table(name = "output_entity")
 @NamedQueries(
         value = {
                 @NamedQuery(name = "OutputMetadataEntity.getAll", query = "SELECT output FROM OutputMetadataEntity output"),

@@ -1,0 +1,1 @@
+INSERT INTO output_entity (correctOutput, userOutput, isHidden, inputID) VALUES ('100', '100', FALSE, 1), ('test   ', 't', FALSE , 2), ('1', '1', TRUE, 3);
