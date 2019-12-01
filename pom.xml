@@ -57,6 +57,16 @@
     </dependency>
 
     <dependency>
+        <groupId>com.kumuluz.ee.discovery</groupId>
+        <artifactId>kumuluzee-discovery-etcd</artifactId>
+        <version>${kumuluzee-discovery.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.kumuluz.ee.discovery</groupId>
+        <artifactId>kumuluzee-discovery-consul</artifactId>
+        <version>${kumuluzee-discovery.version}</version>
+    </dependency>
+    <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
         <version>${postgresql.version}</version>
