@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-outputs-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: code-outputs
+  template:
+    metadata:
+      labels:
+        app: code-outputs
+    spec:
+      containers:
+        - image: ldodevska/code-outputs:1.0-SNAPSHOT-4.1
+          name: code-outputs
+          env:
+            - name: KUMULUZEE_DISCOVERY_CLUSTER
+              value: code
+            - name: KUMULUZEE_DISCOVERY_ETCD_HOSTS
+              value: http://etcd:2379
+            - name: KUMULUZEE_SERVER_BASEURL
+              value: http://34.67.168.202:8080
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://10.64.240.3:5432/code-outputs
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: postgres
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              value: laptop
+          ports:
+            - containerPort: 8080
+              name: server
+              protocol: TCP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: code-outputs
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: code-outputs
