@@ -1,9 +1,6 @@
 package com.fri.code.outputs.services.beans;
 
-import com.fri.code.outputs.lib.CompilerOutput;
-import com.fri.code.outputs.lib.CompilerReadyInput;
-import com.fri.code.outputs.lib.InputMetadata;
-import com.fri.code.outputs.lib.OutputMetadata;
+import com.fri.code.outputs.lib.*;
 import com.fri.code.outputs.models.converters.OutputMetadataConverter;
 import com.fri.code.outputs.models.entities.OutputMetadataEntity;
 import com.kumuluz.ee.rest.beans.QueryParameters;
@@ -23,6 +20,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.util.*;
@@ -40,8 +38,8 @@ public class OutputMetadataBean {
     private EntityManager em;
 
     @Inject
-    @DiscoverService(value = "code-inputs")
-    private Optional<String> basePath;
+    @DiscoverService(value = "code-ide")
+    private Optional<String> idePath;
 
     private Client httpClient;
     private String compilerApiUrl;
@@ -75,11 +73,24 @@ public class OutputMetadataBean {
     }
 
     public CompilerOutput getCompilerOutput(InputMetadata inputMetadata) {
-        CompilerOutput output = new CompilerOutput();
-        String script = "x=input()\nprint(x)"; // treba da e getScript(exerciseID, currentUserID);
+        CompilerOutput output;
+        IDEMetadata ideMetadata = new IDEMetadata();
+        try {
+            if (idePath.isPresent()) {
+                String totalPath = String.format("%s/v1/script/%d", idePath.get(), inputMetadata.getExerciseID());
+                ideMetadata = httpClient
+                        .target(totalPath)
+                        .request().get(new GenericType<IDEMetadata>() {
+                        });
+            }
+        } catch (WebApplicationException | ProcessingException e) {
+            log.severe(e.getMessage());
+            throw new InternalServerErrorException(e);
+        }
+//        String script = "x=input()\nprint(x)"; // treba da e getScript(exerciseID, currentUserID);
         CompilerReadyInput input = new CompilerReadyInput();
         input.setLanguage("python3"); // treba da e setLanguage(getSubject(exerciseID).getLanguage())
-        input.setScript(script);
+        input.setScript(ideMetadata.getCode());
         if (!inputMetadata.getContent().isEmpty())
             input.setStdin(inputMetadata.getContent());
         input.setVersionIndex("2");
@@ -94,12 +105,11 @@ public class OutputMetadataBean {
     }
 
     public Map<Integer, Boolean> getCompilerOutputsForExercise(List<InputMetadata> inputs) {
-        Map<Integer, Boolean> outputs = new HashMap();
-
+        Map<Integer, Boolean> outputs = new HashMap<>();
         for (InputMetadata inp : inputs) {
             CompilerOutput output = getCompilerOutput(inp);
             OutputMetadata outputMetadata = getOutputForInputID(inp.getID());
-            outputs.put(outputMetadata.getID(), compareOutputs(outputMetadata, output));
+            outputs.put(inp.getID(), compareOutputs(outputMetadata, output));
         }
 
         return outputs;

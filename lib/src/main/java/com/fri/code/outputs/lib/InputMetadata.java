@@ -5,7 +5,7 @@ public class InputMetadata {
     private Integer ID;
     private String content;
     private Boolean isHidden;
-//    private Integer exerciseID;
+    private Integer exerciseID;
 
     public Integer getID() {
         return ID;
@@ -31,11 +31,11 @@ public class InputMetadata {
         isHidden = hidden;
     }
 
-//    public Integer getExerciseID() {
-//        return exerciseID;
-//    }
-//
-//    public void setExerciseID(Integer exerciseID) {
-//        this.exerciseID = exerciseID;
-//    }
+    public Integer getExerciseID() {
+        return exerciseID;
+    }
+
+    public void setExerciseID(Integer exerciseID) {
+        this.exerciseID = exerciseID;
+    }
 }
