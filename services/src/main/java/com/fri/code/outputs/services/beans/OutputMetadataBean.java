@@ -111,7 +111,6 @@ public class OutputMetadataBean {
             OutputMetadata outputMetadata = getOutputForInputID(inp.getID());
             outputs.put(inp.getID(), compareOutputs(outputMetadata, output));
         }
-
         return outputs;
     }
 
