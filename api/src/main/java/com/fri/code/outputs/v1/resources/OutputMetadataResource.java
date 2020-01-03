@@ -47,7 +47,6 @@ public class OutputMetadataResource {
     }
 
     @GET
-    @Timed
     public Response getOutputForInputID(@QueryParam("inputID") Integer inputID) {
         try {
             OutputMetadata output = outputMetadataBean.getOutputForInputID(inputID);
@@ -63,6 +62,7 @@ public class OutputMetadataResource {
 
     @GET
     @Path("/all")
+    @Timed
     public Response getAllOutputs() {
         try {
             List<OutputMetadata> outputs = outputMetadataBean.getAllOutputs();

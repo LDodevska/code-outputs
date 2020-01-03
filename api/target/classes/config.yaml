@@ -23,5 +23,5 @@ kumuluzee:
         jndi-name: jdbc/OutputMetadataPS
   metrics:
     web-instrumentation:
-      - name: outputss-endpoint
+      - name: outputs-endpoint
         url-pattern: /v1/outputs/*
