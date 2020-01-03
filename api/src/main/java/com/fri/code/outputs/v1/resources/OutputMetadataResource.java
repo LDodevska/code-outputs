@@ -1,22 +1,19 @@
 package com.fri.code.outputs.v1.resources;
 
 
-import com.fri.code.outputs.lib.CompilerOutput;
 import com.fri.code.outputs.lib.InputMetadata;
 import com.fri.code.outputs.lib.OutputMetadata;
 import com.fri.code.outputs.services.beans.OutputMetadataBean;
 import com.fri.code.outputs.v1.dtos.ApiError;
-import javassist.tools.reflect.Compiler;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +47,7 @@ public class OutputMetadataResource {
     }
 
     @GET
+    @Timed
     public Response getOutputForInputID(@QueryParam("inputID") Integer inputID) {
         try {
             OutputMetadata output = outputMetadataBean.getOutputForInputID(inputID);
