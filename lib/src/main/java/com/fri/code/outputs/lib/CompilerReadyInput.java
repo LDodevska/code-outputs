@@ -8,12 +8,6 @@ public class CompilerReadyInput{
     private String language;
     private String versionIndex;
 
-
-    public CompilerReadyInput() {
-        this.clientId = "336e764a0d15862c64c12304e1d90687";
-        this.clientSecret = "a886859dc6d68b2744c1b434ad7c4ceb3611f5877a905a05e5f7375665f40a73";
-    }
-
     public String getLanguage() {
         return language;
     }
@@ -52,5 +46,13 @@ public class CompilerReadyInput{
 
     public String getClientSecret() {
         return clientSecret;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
 }

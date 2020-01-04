@@ -130,5 +130,10 @@ public class OutputMetadataResource {
         else return Response.status(Response.Status.NOT_FOUND).build();
     }
 
+    @GET
+    @Path("lodi-mafija")
+    public Response getConfig() {
+        return Response.ok(outputMetadataBean.getConfig()).build();
+    }
 
 }
