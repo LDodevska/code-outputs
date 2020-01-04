@@ -3,9 +3,8 @@ package com.fri.code.outputs.services.beans;
 import com.fri.code.outputs.lib.*;
 import com.fri.code.outputs.models.converters.OutputMetadataConverter;
 import com.fri.code.outputs.models.entities.OutputMetadataEntity;
-import com.kumuluz.ee.rest.beans.QueryParameters;
-import com.kumuluz.ee.rest.utils.JPAUtils;
 import com.kumuluz.ee.discovery.annotations.DiscoverService;
+import org.json.JSONObject;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -22,12 +21,9 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.PersistenceException.*;
-import javax.persistence.NoResultException;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -87,7 +83,6 @@ public class OutputMetadataBean {
             log.severe(e.getMessage());
             throw new InternalServerErrorException(e);
         }
-//        String script = "x=input()\nprint(x)"; // treba da e getScript(exerciseID, currentUserID);
         CompilerReadyInput input = new CompilerReadyInput();
         input.setLanguage("python3"); // treba da e setLanguage(getSubject(exerciseID).getLanguage())
         input.setScript(ideMetadata.getCode());
@@ -104,14 +99,29 @@ public class OutputMetadataBean {
         return output;
     }
 
-    public Map<Integer, Boolean> getCompilerOutputsForExercise(List<InputMetadata> inputs) {
-        Map<Integer, Boolean> outputs = new HashMap<>();
+    public List<OutputMetadata> getCompilerOutputsForExercise(List<InputMetadata> inputs) {
+        List<OutputMetadata> outputs = new ArrayList<>();
         for (InputMetadata inp : inputs) {
             CompilerOutput output = getCompilerOutput(inp);
             OutputMetadata outputMetadata = getOutputForInputID(inp.getID());
-            outputs.put(inp.getID(), compareOutputs(outputMetadata, output));
+            Boolean result = compareOutputs(outputMetadata, output);
+            outputMetadata = updateSolved(outputMetadata, result, output.getOutput());
+            outputs.add(outputMetadata);
         }
         return outputs;
+    }
+
+    public OutputMetadata updateSolved(OutputMetadata outputMetadata, Boolean solved, String output) {
+        OutputMetadataEntity entity = OutputMetadataConverter.toEntity(outputMetadata);
+        try {
+            beginTx();
+            entity.setUserOutput(output);
+            entity.setSolved(solved);
+            commitTx();
+        } catch (Exception e) {
+            rollbackTx();
+        }
+        return OutputMetadataConverter.toDTO(entity);
     }
 
     public OutputMetadata createOutputMetadata(OutputMetadata outputMetadata) {

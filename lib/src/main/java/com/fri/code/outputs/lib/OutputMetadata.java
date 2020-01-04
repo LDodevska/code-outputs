@@ -6,6 +6,15 @@ public class OutputMetadata {
     private String correctOutput;
     private Boolean isHidden;
     private Integer inputID;
+    private Boolean isSolved;
+
+    public Boolean getSolved() {
+        return isSolved;
+    }
+
+    public void setSolved(Boolean solved) {
+        isSolved = solved;
+    }
 
     public Integer getID() {
         return ID;

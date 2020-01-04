@@ -12,6 +12,7 @@ public class OutputMetadataConverter {
         outputMetadata.setUserOutput(entity.getUserOutput());
         outputMetadata.setHidden(entity.getIsHidden());
         outputMetadata.setInputID(entity.getInputID());
+        outputMetadata.setSolved(entity.getSolved());
 
         return outputMetadata;
     }
@@ -23,6 +24,7 @@ public class OutputMetadataConverter {
         outputMetadataEntity.setUserOutput(outputMetadata.getUserOutput());
         outputMetadataEntity.setIsHidden(outputMetadata.getHidden());
         outputMetadataEntity.setInputID(outputMetadata.getInputID());
+        outputMetadataEntity.setSolved(outputMetadata.getSolved());
 
         return outputMetadataEntity;
     }

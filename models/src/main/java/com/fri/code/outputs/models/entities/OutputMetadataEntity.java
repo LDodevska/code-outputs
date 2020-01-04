@@ -28,6 +28,9 @@ public class OutputMetadataEntity {
     @Column(name = "inputID", unique = true)
     private Integer inputID;
 
+    @Column(name = "isSolved", columnDefinition = "boolean default false")
+    private Boolean isSolved;
+
     public Integer getID() {
         return ID;
     }
@@ -66,5 +69,13 @@ public class OutputMetadataEntity {
 
     public void setInputID(Integer inputID) {
         this.inputID = inputID;
+    }
+
+    public Boolean getSolved() {
+        return isSolved;
+    }
+
+    public void setSolved(Boolean solved) {
+        isSolved = solved;
     }
 }

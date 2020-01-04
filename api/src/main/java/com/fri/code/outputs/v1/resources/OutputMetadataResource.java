@@ -101,7 +101,7 @@ public class OutputMetadataResource {
     @Path("results")
     public Response getResults(List<InputMetadata> inputs) {
         try {
-            Map<Integer, Boolean> outputs = outputMetadataBean.getCompilerOutputsForExercise(inputs);
+            List<OutputMetadata> outputs = outputMetadataBean.getCompilerOutputsForExercise(inputs);
             return Response.status(Response.Status.OK).entity(outputs).build();
         } catch (Exception e) {
             ApiError apiError = new ApiError();
