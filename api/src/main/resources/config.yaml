@@ -25,7 +25,7 @@ kumuluzee:
         type: liveness
         jndi-name: jdbc/OutputMetadataPS
       etcd-health-check:
-        connection-url: http://localhost:2379/health
+        connection-url: http://etcd:2379/health
   metrics:
     web-instrumentation:
       - name: outputs-endpoint
