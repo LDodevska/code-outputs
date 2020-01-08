@@ -17,7 +17,7 @@
 
 
     <properties>
-        <kumuluzee.version>3.5.0</kumuluzee.version>
+        <kumuluzee.version>3.6.0</kumuluzee.version>
         <kumuluzee-rest.version>1.2.3</kumuluzee-rest.version>
         <kumuluzee-discovery.version>1.1.1</kumuluzee-discovery.version>
         <kumuluzee-config.version>1.2.0</kumuluzee-config.version>
