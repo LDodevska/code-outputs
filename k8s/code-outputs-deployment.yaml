@@ -13,7 +13,7 @@ spec:
         app: code-outputs
     spec:
       containers:
-        - image: ldodevska/code-outputs:1.0-SNAPSHOT-14.1
+        - image: ldodevska/code-outputs:1.0-SNAPSHOT-20.1
           name: code-outputs
           env:
             - name: KUMULUZEE_DISCOVERY_CLUSTER
