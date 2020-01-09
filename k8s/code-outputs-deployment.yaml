@@ -20,6 +20,8 @@ spec:
               value: code
             - name: KUMULUZEE_DISCOVERY_ETCD_HOSTS
               value: http://etcd:2379
+            - name: KUMULUZEE_CONFIG_ETCD_HOSTS
+              value: http://etcd:2379
             - name: KUMULUZEE_SERVER_BASEURL
               value: http://34.67.168.202:8080
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
