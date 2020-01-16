@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @ApplicationScoped
 @Path("/outputs")
@@ -24,6 +25,8 @@ import java.util.Map;
 public class OutputMetadataResource {
 
     private static Response.Status STATUS_OK = Response.Status.OK;
+
+    private Logger log = Logger.getLogger(OutputMetadataBean.class.getName());
 
     @Inject
     private OutputMetadataBean outputMetadataBean;
@@ -102,6 +105,7 @@ public class OutputMetadataResource {
     public Response getResults(List<InputMetadata> inputs) {
         try {
             List<OutputMetadata> outputs = outputMetadataBean.getCompilerOutputsForExercise(inputs);
+            log.info(String.format("Number of outputs: %d", outputs.size()));
             return Response.status(Response.Status.OK).entity(outputs).build();
         } catch (Exception e) {
             ApiError apiError = new ApiError();
