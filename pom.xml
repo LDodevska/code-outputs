@@ -24,6 +24,7 @@
         <kumuluzee-config-mp.version>1.3.0</kumuluzee-config-mp.version>
         <kumuluzee-health.version>2.1.0</kumuluzee-health.version>
         <kumuluzee-metrics.version>2.0.1</kumuluzee-metrics.version>
+        <kumuluzee-openapi.version>1.1.0-SNAPSHOT</kumuluzee-openapi.version>
         <kumuluzee-fault-tolerance.version>2.0.1</kumuluzee-fault-tolerance.version>
 
         <postgresql.version>42.2.8</postgresql.version>
@@ -96,6 +97,17 @@
                 <groupId>com.kumuluz.ee.fault.tolerance</groupId>
                 <artifactId>kumuluzee-fault-tolerance-smallrye</artifactId>
                 <version>${kumuluzee-fault-tolerance.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.openapi</groupId>
+                <artifactId>kumuluzee-openapi</artifactId>
+                <version>${kumuluzee-openapi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.kumuluz.ee.openapi</groupId>
+                <artifactId>kumuluzee-openapi-ui</artifactId>
+                <version>${kumuluzee-openapi.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.postgresql</groupId>
