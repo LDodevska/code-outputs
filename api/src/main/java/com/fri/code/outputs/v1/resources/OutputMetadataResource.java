@@ -5,6 +5,7 @@ import com.fri.code.outputs.lib.InputMetadata;
 import com.fri.code.outputs.lib.OutputMetadata;
 import com.fri.code.outputs.services.beans.OutputMetadataBean;
 import com.fri.code.outputs.v1.dtos.ApiError;
+import com.kumuluz.ee.logs.cdi.Log;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,6 +24,7 @@ import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Map;
 
+@Log
 @ApplicationScoped
 @Path("/outputs")
 @Produces(MediaType.APPLICATION_JSON)
