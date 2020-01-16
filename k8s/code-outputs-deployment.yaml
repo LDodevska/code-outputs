@@ -13,12 +13,14 @@ spec:
         app: code-outputs
     spec:
       containers:
-        - image: ldodevska/code-outputs:1.0-SNAPSHOT-14.1
+        - image: ldodevska/code-outputs:1.0-SNAPSHOT-17.1
           name: code-outputs
           env:
             - name: KUMULUZEE_DISCOVERY_CLUSTER
               value: code
             - name: KUMULUZEE_DISCOVERY_ETCD_HOSTS
+              value: http://etcd:2379
+            - name: KUMULUZEE_CONFIG_ETCD_HOSTS
               value: http://etcd:2379
             - name: KUMULUZEE_SERVER_BASEURL
               value: http://34.67.168.202:8080
@@ -35,6 +37,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /health/liveness
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
               port: server
             initialDelaySeconds: 20
             periodSeconds: 3

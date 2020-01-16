@@ -5,6 +5,13 @@ import com.fri.code.outputs.lib.InputMetadata;
 import com.fri.code.outputs.lib.OutputMetadata;
 import com.fri.code.outputs.services.beans.OutputMetadataBean;
 import com.fri.code.outputs.v1.dtos.ApiError;
+import com.kumuluz.ee.logs.cdi.Log;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -18,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@Log
 @ApplicationScoped
 @Path("/outputs")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,6 +43,12 @@ public class OutputMetadataResource {
     protected UriInfo uriInfo;
 
     @GET
+    @Operation(summary = "Get details for output", description = "Returns details for output")
+    @ApiResponses({
+            @ApiResponse(description = "Output details", responseCode = "200", content = @Content(schema = @Schema(implementation =
+                    OutputMetadata.class))),
+            @ApiResponse(description = "Output not found", responseCode = "404")
+    })
     @Path("/{outputID}")
     public Response getOutputById(@PathParam("outputID") Integer outputID) {
         try {
@@ -50,6 +64,12 @@ public class OutputMetadataResource {
     }
 
     @GET
+    @Operation(summary = "Get output for input", description = "Returns output for specified input")
+    @ApiResponses({
+            @ApiResponse(description = "Output details", responseCode = "200", content = @Content(schema = @Schema(implementation =
+                    OutputMetadata.class))),
+            @ApiResponse(description = "Output not found", responseCode = "404")
+    })
     public Response getOutputForInputID(@QueryParam("inputID") Integer inputID) {
         try {
             OutputMetadata output = outputMetadataBean.getOutputForInputID(inputID);
@@ -64,6 +84,12 @@ public class OutputMetadataResource {
     }
 
     @GET
+    @Operation(summary = "Get all outputs", description = "Returns all details")
+    @ApiResponses({
+            @ApiResponse(description = "List of outputs", responseCode = "200", content = @Content(array = @ArraySchema(schema = @Schema(implementation =
+                    OutputMetadata.class)))),
+            @ApiResponse(description = "Output not found", responseCode = "404")
+    })
     @Path("/all")
     @Timed
     public Response getAllOutputs() {
@@ -80,6 +106,12 @@ public class OutputMetadataResource {
     }
 
     @POST
+    @Operation(summary = "Create output", description = "Creates and returns the output")
+    @ApiResponses({
+            @ApiResponse(description = "New output", responseCode = "200", content = @Content(schema = @Schema(implementation =
+                    OutputMetadata.class))),
+            @ApiResponse(description = "Can not create output", responseCode = "400")
+    })
     public Response createOutput(OutputMetadata outputMetadata) {
 
         if (outputMetadata.getInputID() == null || outputMetadata.getCorrectOutput() == null || outputMetadata.getUserOutput() == null) {
@@ -101,6 +133,12 @@ public class OutputMetadataResource {
 
     //For the given inputs, return the compiled outputs and compare them with the correct ones.
     @POST
+    @Operation(summary = "Get outputs for each input", description = "Returns compiled outputs for given inputs")
+    @ApiResponses({
+            @ApiResponse(description = "List of outputs", responseCode = "200", content = @Content(array = @ArraySchema( schema = @Schema(implementation =
+                    OutputMetadata.class)))),
+            @ApiResponse(description = "Internal server error", responseCode = "500")
+    })
     @Path("results")
     public Response getResults(List<InputMetadata> inputs) {
         try {
@@ -117,6 +155,11 @@ public class OutputMetadataResource {
     }
 
     @DELETE
+    @Operation(summary = "Delete output", description = "Deletes output")
+    @ApiResponses({
+            @ApiResponse(description = "Output deleted", responseCode = "204"),
+            @ApiResponse(description = "Output not found", responseCode = "404")
+    })
     @Path("/{outputID}")
     public Response deleteOutput(@PathParam("outputID") Integer outputID) {
         if (outputMetadataBean.deleteOutputMetadata(outputID))
@@ -128,6 +171,11 @@ public class OutputMetadataResource {
     }
 
     @DELETE
+    @Operation(summary = "Delete all outputs", description = "Deletes all outputs")
+    @ApiResponses({
+            @ApiResponse(description = "Outputs deleted", responseCode = "204" ),
+            @ApiResponse(description = "Output not found", responseCode = "404")
+    })
     public Response deleteAllOutputs(){
         if(outputMetadataBean.deleteAllOutputs())
             return Response.status(Response.Status.NO_CONTENT).build();
